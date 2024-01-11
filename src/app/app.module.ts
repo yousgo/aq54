@@ -7,7 +7,7 @@ import { HomeComponent } from './components/home/home.component';
 import { RouteTestComponent } from './components/route-test/route-test.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { HttpClientModule } from '@angular/common/http';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 
 @NgModule({
   declarations: [
@@ -22,7 +22,7 @@ import { CommonModule } from '@angular/common';
     HttpClientModule,
     // CommonModule
   ],
-  providers: [],
+  providers: [DatePipe],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

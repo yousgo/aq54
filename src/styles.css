@@ -6,20 +6,21 @@ body{
 .main{    
 }
 .content{
-    margin: 3em;
+    margin:2em 2em;
     /* padding-bottom: 1em; */
 }
 
 .contentWhite{
-    margin: 3em;
+    margin:2em 2em;
     background-color: white;
     /* padding-bottom: 1em; */
 }
 
 .bordered{
-    border: solid 1px gray;
-    border-radius: 15px;
+    /* border: solid 1px lightgray; */
+    border-radius: 10px;
 }
+
 
 .iconFrame{
     width: 130px;
@@ -37,7 +38,7 @@ body{
     line-height: 1;
 }
 
-.ulwithoutDot{
+.ulwithoutDots{
     list-style-type:none;
-    padding-left: 1em;
+    padding-left: 0.5em;
 }
