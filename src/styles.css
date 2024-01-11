@@ -1,1 +1,43 @@
 /* You can add global styles to this file, and also import other style files */
+body{
+    background-color: lightgray;
+}
+
+.main{    
+}
+.content{
+    margin: 3em;
+    /* padding-bottom: 1em; */
+}
+
+.contentWhite{
+    margin: 3em;
+    background-color: white;
+    /* padding-bottom: 1em; */
+}
+
+.bordered{
+    border: solid 1px gray;
+    border-radius: 15px;
+}
+
+.iconFrame{
+    width: 130px;
+    /* max-width: 50px; */
+    background-size: contain;
+
+}
+
+.fsBig{
+    font-size:2em;
+} 
+
+.fsVeryBig{
+    font-size: 6em;
+    line-height: 1;
+}
+
+.ulwithoutDot{
+    list-style-type:none;
+    padding-left: 1em;
+}
