@@ -20,11 +20,11 @@ export class MainService {
     return this.http.get(url+'getStationStatus/'+stationId);
   }
 
-  getValuesByDTimeRange(stationName:string,dtFrom:string, dtTo:string){
+  getValuesByDTime(stationName:string,dtFrom:string, dtTo:string){
     return this.http.get(url+'getRange/'+stationName+'/'+dtFrom+'/'+dtTo)
   }
 
-  getHourlyAvgByDTRange(stationName:string,dtFrom:string, dtTo:string){
+  getHourlyAvgByDTime(stationName:string,dtFrom:string, dtTo:string){
     return this.http.get(url+'getHourlyAvg/'+stationName+'/'+dtFrom+'/'+dtTo)
   }
 }

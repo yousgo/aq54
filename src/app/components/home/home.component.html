@@ -1,6 +1,6 @@
 <div class="row justify-content-between">
     <div class="col-sm-6">
-        <div class="card mr-3">
+        <div class="card mr-3 shadow">
             <div class="card-header ">
                 <div class="d-flex justify-content-between align-items-center">{{sensor1Name}}
                     <span *ngIf="spinner1" class="spinner-border spinner-border-sm" role="status"
@@ -13,13 +13,16 @@
                         <div class="flex-column justify-content-between">
                             <div class="">
                                 <div class="d-flex align-items-center">
-                                    <img class="iconFrame" *ngIf="value1Clear['temperature']<25" src="../../../assets/images/nuageux.png" >
-                                    <img class="iconFrame" *ngIf="value1Clear['temperature']>25" src="../../../assets/images/soleil.png" >
-                                    
+                                    <img class="iconFrame" *ngIf="value1Clear['temperature']<limitTemp"
+                                        src="../../../assets/images/nuageux.png">
+                                    <img class="iconFrame" *ngIf="value1Clear['temperature']>=limitTemp"
+                                        src="../../../assets/images/soleil.png">
+
                                     <div class="d-flex flex-column">
                                         <div class="d-flex flex-row">
-                                            <span class="fsVeryBig px-3">{{value1Clear['temperature']| number:'0.0-2'}} </span>
-                                            <div class="fs-1 pt-4">{{value1Clear['temperatureUnit']}}</div>
+                                            <span class="fsVeryBig px-3">{{value1Clear['temperature']| number:'0.0-2'}}
+                                            </span>
+                                            <div class="fs-1 pt-2">{{value1Clear['temperatureUnit']}}</div>
                                         </div>
                                         <div class="d-flex flex-row align-items-center px-3">
                                             <div class="fsBig">{{ value1Clear['timestamp']| date:'HH:mm'}}</div>
@@ -28,25 +31,27 @@
                                             <!-- <div>{{ statuses[0]['data'] | json}}</div> -->
                                         </div>
                                     </div>
-
                                 </div>
+                                <br />
+                                <button class="btn btn-primary" (click)="refresh(sensor1Name)">Refresh</button>
                             </div>
                         </div>
                     </div>
                     <div class="col-sm-4">
-                        <ul class="fs-6 ulwithoutDot">
-                            <li *ngFor="let item of value1">{{item['sensor'] +' '+ item['value']+' '+  item['unit']}}</li>
+                        <ul class="fs-6 ulwithoutDots">
+                            <li *ngFor="let itm of value1">{{itm['sensor'] | titlecase}} <span
+                                    class="fw-bold text-secondary">{{ ' '+ itm['value']}}</span>{{' '+ itm['unit']}}
+                            </li>
                         </ul>
                     </div>
                 </div>
                 <!-- <h5 class="card-title"></h5> -->
                 <!-- <p class="card-text">{{ sandBoxVar |json}}</p> -->
-                <button class="btn btn-primary" (click)="refresh(sensor1Name)">Refresh</button>
             </div>
         </div>
     </div>
     <div class="col-sm-6">
-        <div class="card ml-3">
+        <div class="card ml-3 shadow">
             <div class="card-header">
                 <div class="d-flex justify-content-between align-items-center">{{sensor2Name}}
                     <span *ngIf="spinner2" class="spinner-border spinner-border-sm" role="status"
@@ -55,11 +60,44 @@
             </div>
             <div class="card-body">
                 <!-- <h5 class="card-title">{{sensor2Name}}</h5> -->
-                <p class="card-text">{{ (value2 | json)}}</p>
-                <ul>
-                    <!-- <li *ngFor="let item of value2">{{item |json}}</li> -->
-                </ul>
-                <a class="btn btn-primary" (click)="refresh(sensor2Name)">Refresh</a>
+                <div class="row">
+                    <div class="col">
+                        <div class="flex-column justify-content-between">
+                            <div class="">
+                                <div class="d-flex align-items-center">
+                                    <img class="iconFrame" *ngIf="value2Clear['temperature']<limitTemp"
+                                        src="../../../assets/images/nuageux.png">
+                                    <img class="iconFrame" *ngIf="value2Clear['temperature']>=limitTemp"
+                                        src="../../../assets/images/soleil.png">
+
+                                    <div class="d-flex flex-column">
+                                        <div class="d-flex flex-row">
+                                            <span class="fsVeryBig px-3">{{value2Clear['temperature']| number:'0.0-2'}}
+                                            </span>
+                                            <div class="fs-1 pt-4">{{value2Clear['temperatureUnit']}}</div>
+                                        </div>
+                                        <div class="d-flex flex-row align-items-center px-3">
+                                            <div class="fsBig">{{ value2Clear['timestamp']| date:'HH:mm'}}</div>
+                                            <div class=""></div>
+                                            <div class="pt-2 px-3 fs-5">{{ value2Clear['timestamp'] | date}}</div>
+                                            <!-- <div>{{ statuses[0]['data'] | json}}</div> -->
+                                        </div>
+                                    </div>
+                                </div>
+                                <br />
+                                <a class="btn btn-primary " (click)="refresh(sensor2Name)">Refresh</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <ul class="fs-6 ulwithoutDots">
+                            <li *ngFor="let itm of value2">{{itm['sensor'] | titlecase}} <span
+                                    class="fw-bold text-secondary">{{ ' '+ itm['value']}}</span>{{' '+ itm['unit']}}
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <!-- <p class="card-text">{{ (value2 | json)}}</p> -->
             </div>
         </div>
     </div>
@@ -84,3 +122,46 @@
     </div>
 
 </div> -->
+
+<div class="d-flex bordered content mx-0 justify-content-between">
+
+    <div class="mx-2">
+
+        <div class="card shadow mr-2" style="width: 18rem;">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                <h5 class="card-title fs-4">Form</h5>
+                <div class="spinner-grow" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+            </div>
+            <div ngbDropdown class="d-inline-block">
+                <p class="card-text">sensor</p>
+                <button type="button" class="btn btn-outline-primary" id="dropdownBasic1" ngbDropdownToggle>
+                    Toggle dropdown
+                </button>
+                <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                    <button ngbDropdownItem>Action - 1</button>
+                    <button ngbDropdownItem>Another Action</button>
+                    <button ngbDropdownItem>Something else is here</button>
+                </div>
+            </div>
+            <p class="card-text">Type</p>
+            
+            <p class="card-text">date from</p>
+            
+            <p class="card-text">date to</p>
+            
+            <a class="btn btn-dark" (click)="getRangeByDT(sensor1Name, dt1,dt21)">Go</a>
+        </div>
+    </div>
+    </div>
+    <div class="card shadow col">
+        <div class="card-body">
+            <!-- <h5 class="card-title">Card title</h5> -->
+            <p class="card-text">{{ (sandBoxVar | json)}}</p>
+        </div>
+
+    </div>
+
+</div>
