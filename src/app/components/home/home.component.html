@@ -1,6 +1,6 @@
 <div class="row justify-content-between">
     <div class="col-sm-6">
-        <div class="card mr-3 shadow">
+        <div class="card me-2 shadow">
             <div class="card-header ">
                 <div class="d-flex justify-content-between align-items-center">{{sensor1Name}}
                     <span *ngIf="spinner1" class="spinner-border spinner-border-sm" role="status"
@@ -51,7 +51,7 @@
         </div>
     </div>
     <div class="col-sm-6">
-        <div class="card ml-3 shadow">
+        <div class="card ms-2 shadow">
             <div class="card-header">
                 <div class="d-flex justify-content-between align-items-center">{{sensor2Name}}
                     <span *ngIf="spinner2" class="spinner-border spinner-border-sm" role="status"
@@ -74,7 +74,7 @@
                                         <div class="d-flex flex-row">
                                             <span class="fsVeryBig px-3">{{value2Clear['temperature']| number:'0.0-2'}}
                                             </span>
-                                            <div class="fs-1 pt-4">{{value2Clear['temperatureUnit']}}</div>
+                                            <div class="fs-1 pt-2">{{value2Clear['temperatureUnit']}}</div>
                                         </div>
                                         <div class="d-flex flex-row align-items-center px-3">
                                             <div class="fsBig">{{ value2Clear['timestamp']| date:'HH:mm'}}</div>
@@ -123,42 +123,60 @@
 
 </div> -->
 
-<div class="d-flex bordered content mx-0 justify-content-between">
+<div class="d-flex bordered my-4 justify-content-between">
 
-    <div class="mx-2">
+    <div class="me-4">
 
         <div class="card shadow mr-2" style="width: 18rem;">
             <div class="card-body">
                 <div class="d-flex justify-content-between align-items-center">
-                <h5 class="card-title fs-4">Form</h5>
-                <div class="spinner-grow" role="status">
-                    <span class="visually-hidden">Loading...</span>
+                    <h5 class="card-title fs-4">Queries</h5>
+                    <div class="spinner-grow" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
                 </div>
-            </div>
-            <div ngbDropdown class="d-inline-block">
-                <p class="card-text">sensor</p>
-                <button type="button" class="btn btn-outline-primary" id="dropdownBasic1" ngbDropdownToggle>
-                    Toggle dropdown
-                </button>
-                <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
-                    <button ngbDropdownItem>Action - 1</button>
-                    <button ngbDropdownItem>Another Action</button>
-                    <button ngbDropdownItem>Something else is here</button>
+
+                <div class="flex-row my-1">
+                    <div ngbDropdown class="d-inline-block">
+                        <button type="button" class="btn btn-outline-secondary" id="dropdownBasic1" ngbDropdownToggle>
+                            {{ formItems.sensor?formItems.sensor:'Select sensor'}}
+                        </button>
+                        <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                            <button ngbDropdownItem *ngFor="let item of sensors"
+                                (click)="setFormItems(1,item.name)">{{item.name}}</button>
+                        </div>
+                    </div>
+                    <span class="text-danger fw-bold mx-1" *ngIf="!formItems.sensor">*</span>
                 </div>
+
+                <div class="flex-row my-1">
+                    <div ngbDropdown class="d-inline-block">
+                        <button type="button" class="btn btn-outline-secondary" id="dropdownBasic2" ngbDropdownToggle>
+                            {{ formItems.queryType?getQueryDesc(formItems.queryType):'Select type'}}
+                        </button>
+                        <div ngbDropdownMenu aria-labelledby="dropdownBasic2">
+                            <button ngbDropdownItem *ngFor="let item of fetchType"
+                                (click)="setFormItems(2,item.name)">{{item.descr}}</button>
+                        </div>
+                    </div>
+                    <span class="text-danger fw-bold mx-1" *ngIf="!formItems.queryType">*</span>
+                </div>
+
+
+                <p class="card-text">date from</p>
+
+                <p class="card-text">date to</p>
+
+                <a class="btn btn-dark" (click)="fireQuery()" *ngIf='formItems.queryType=="1"'>Get</a>
+                <a class="btn btn-dark" (click)="getRangeByDT(sensor1Name, dt1,dt21)" *ngIf='formItems.queryType=="2"'>
+                    'Download'</a>
             </div>
-            <p class="card-text">Type</p>
-            
-            <p class="card-text">date from</p>
-            
-            <p class="card-text">date to</p>
-            
-            <a class="btn btn-dark" (click)="getRangeByDT(sensor1Name, dt1,dt21)">Go</a>
         </div>
-    </div>
     </div>
     <div class="card shadow col">
         <div class="card-body">
             <!-- <h5 class="card-title">Card title</h5> -->
+            <p class="card-text">{{ (formItems | json)}}</p>
             <p class="card-text">{{ (sandBoxVar | json)}}</p>
         </div>
 
