@@ -1,4 +1,6 @@
+/* @import '~bootstrap-icons/font/bootstrap-icons.css'; */
 /* You can add global styles to this file, and also import other style files */
+
 body{
     background-color: lightgray;
 }
@@ -26,7 +28,7 @@ body{
     width: 130px;
     /* max-width: 50px; */
     background-size: contain;
-
+    
 }
 
 .fsBig{

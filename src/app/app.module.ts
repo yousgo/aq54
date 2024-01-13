@@ -7,7 +7,8 @@ import { HomeComponent } from './components/home/home.component';
 import { RouteTestComponent } from './components/route-test/route-test.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { HttpClientModule } from '@angular/common/http';
-import { CommonModule, DatePipe } from '@angular/common';
+import { CommonModule, DatePipe, DecimalPipe } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -20,9 +21,10 @@ import { CommonModule, DatePipe } from '@angular/common';
     AppRoutingModule,
     NgbModule,
     HttpClientModule,
+    FormsModule,
     // CommonModule
   ],
-  providers: [DatePipe],
+  providers: [DatePipe, DecimalPipe],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

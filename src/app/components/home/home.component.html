@@ -131,14 +131,14 @@
             <div class="card-body">
                 <div class="d-flex justify-content-between align-items-center">
                     <h5 class="card-title fs-4">Queries</h5>
-                    <div class="spinner-grow" role="status">
+                    <div class="spinner-grow" role="status" *ngIf="queryspinner">
                         <span class="visually-hidden">Loading...</span>
                     </div>
                 </div>
 
-                <div class="flex-row my-1">
-                    <div ngbDropdown class="d-inline-block">
-                        <button type="button" class="btn btn-outline-secondary" id="dropdownBasic1" ngbDropdownToggle>
+                <div class="flex-row my-1 ">
+                    <div ngbDropdown class="d-inline-block" >
+                        <button type="button" class="btn btn-outline-secondary " id="dropdownBasic1" ngbDropdownToggle>
                             {{ formItems.sensor?formItems.sensor:'Select sensor'}}
                         </button>
                         <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
@@ -149,7 +149,7 @@
                     <span class="text-danger fw-bold mx-1" *ngIf="!formItems.sensor">*</span>
                 </div>
 
-                <div class="flex-row my-1">
+                <div class="d-inline-flex my-1">
                     <div ngbDropdown class="d-inline-block">
                         <button type="button" class="btn btn-outline-secondary" id="dropdownBasic2" ngbDropdownToggle>
                             {{ formItems.queryType?getQueryDesc(formItems.queryType):'Select type'}}
@@ -162,24 +162,62 @@
                     <span class="text-danger fw-bold mx-1" *ngIf="!formItems.queryType">*</span>
                 </div>
 
+                <div class="d-inline-flex my-1">
+                    <div class="input-group">
+                        <input 
+                            readonly
+                            ngbDatepicker
+                            class="form-control"
+                            placeholder="yyyy-mm-dd"
+                            name="dp"
+                            [(ngModel)]="models.from"
+                            #d="ngbDatepicker"
+                            (ngModelChange)="setPickedDates(1)"
+                            [minDate]="yearBeforeToday"
+                            [maxDate]="models.to"
+                        />
+                        <button class="btn btn-outline-secondary bi bi-calendar3" (click)="d.toggle()" type="button"></button>
+                    </div>
+                    <span class="text-danger fw-bold mx-1" *ngIf="!formItems.dateFrom">*</span>
+            </div>
 
-                <p class="card-text">date from</p>
+            <div class="d-inline-flex my-1">
+                    <div class="input-group">
+                        <input 
+                            readonly
+                            ngbDatepicker
+                            class="form-control"
+                            placeholder="yyyy-mm-dd"
+                            name="dp"
+                            [(ngModel)]="models.to"
+                            #d2="ngbDatepicker"
+                            (ngModelChange)="setPickedDates(2)"
+                            [minDate]="models.from"
+                            [maxDate]="today"
+                        />
+                        <button class="btn btn-outline-secondary" (click)="d2.toggle()" type="button"><i class="bi bi-calendar3"></i></button>
+                    </div>
+                <span class="text-danger fw-bold mx-1" *ngIf="!formItems.dateTo">*</span>
+            </div>
 
-                <p class="card-text">date to</p>
-
-                <a class="btn btn-dark" (click)="fireQuery()" *ngIf='formItems.queryType=="1"'>Get</a>
-                <a class="btn btn-dark" (click)="getRangeByDT(sensor1Name, dt1,dt21)" *ngIf='formItems.queryType=="2"'>
-                    'Download'</a>
+                <a class="btn btn-dark" (click)="getValuesByDT()" *ngIf='formItems.queryType=="1"'>Get</a>
+                <a class="btn btn-dark" (click)="DownloadCSVByDT()" *ngIf='formItems.queryType=="2"'>Download</a>
             </div>
         </div>
     </div>
     <div class="card shadow col">
         <div class="card-body">
             <!-- <h5 class="card-title">Card title</h5> -->
-            <p class="card-text">{{ (formItems | json)}}</p>
+            <p class="card-text" (click)="DownloadCSVByDT()">{{ (formItems | json)}}</p>
             <p class="card-text">{{ (sandBoxVar | json)}}</p>
         </div>
 
     </div>
 
 </div>
+
+@if (downloadError) {
+    <div class="fixed-top">
+        <ngb-alert #selfClosingAlert type="danger" (closed)="downloadError = ''" class="position-absolute top-0 end-0">{{ downloadError }}</ngb-alert>
+    </div>
+}

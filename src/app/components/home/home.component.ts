@@ -1,7 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { MainService } from '../../services/main.service';
-import { Subscription, map, timer, timestamp } from 'rxjs';
-import { DatePipe } from '@angular/common';
+import { Subscription, interval, map, timeout, timer, timestamp } from 'rxjs';
+import { DatePipe, DecimalPipe } from '@angular/common';
+import { NgbCalendar, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
+import { saveAs } from 'file-saver';
 
 type FormItems = {
   sensor: string,
@@ -16,13 +18,13 @@ type FormItems = {
   styleUrl: './home.component.css'
 })
 export class HomeComponent {
-  constructor(private mainSvc: MainService, private datePipe: DatePipe) { }
+  constructor(private mainSvc: MainService, private datePipe: DatePipe,private dcmPipe: DecimalPipe) { }
 
   sensors = [{ id: 188, name: 'SMART188' }, { id: 189, name: 'SMART189' }];
+  fetchType = [{ id: 1, name: "1", descr: 'Get Range' }, { id: 2, name: "2", descr: 'Get Hourly AVG (CSV)' }];
   sensor1Name: string = 'SMART188';
   sensor2Name: string = 'SMART189';
   limitTemp: number = 30;
-  fetchType = [{ id: 1, name: "1", descr: 'Get Range' }, { id: 2, name: "2", descr: 'Get Hourly AVG (CSV)' }];
 
   dt1 = "2024-01-01";
   dt21 = "2024-01-11";
@@ -36,6 +38,7 @@ export class HomeComponent {
 
   spinner1: boolean = false;
   spinner2: boolean = false;
+  queryspinner: boolean = false;
 
   sandBoxVar: any = {}
 
@@ -47,6 +50,46 @@ export class HomeComponent {
     dateFrom: "",
     dateTo: "",
   }
+  today = inject(NgbCalendar).getToday();
+  yearBeforeToday = {
+    year: this.today.year - 1,
+    month: this.today.month,
+    day: this.today.day
+  }
+  models: {from:NgbDateStruct, to:NgbDateStruct} = {
+    from:{
+      year: NaN,
+      month: NaN,
+      day: NaN
+    }, 
+    to:{
+      year: NaN,
+      month: NaN,
+      day: NaN
+    }
+  };
+  
+  downloadError: string = ""
+
+
+	// date: { year: number; month: number } = {year:this.today.year, month:this.today.month};
+  modelToISO(modl:NgbDateStruct) {
+    let month = this.dcmPipe.transform(modl.month, "2.0-0")
+    return modl.year+'-'+month+'-'+modl.day;
+  }
+
+  setPickedDates(index:number){
+     switch (index) {
+      case 1:
+        this.formItems.dateFrom=this.modelToISO(this.models['from'])
+        break;
+        case 2:
+          this.formItems.dateTo=this.modelToISO(this.models['to'])
+        break;
+      default:
+        break;
+       }
+      }
 
   setFormItems(key: number, value: string) {
     switch (key) {
@@ -56,35 +99,36 @@ export class HomeComponent {
       case 2:
         this.formItems.queryType = value;
         break;
-      case 3:
-        this.formItems.dateFrom = value;
-        break;
-      case 4:
-        this.formItems.dateTo = value;
-        break;
 
       default:
         break;
     }
   }
 
-  fireQuery() {
-
-  }
-  getQueryDesc(name: string) {
-    return this.fetchType.find(i => i.name === name)?.descr
-  }
-
-  getRangeByDT(name: string, dateFrom: string, dateTo: string) {
-    this.mainSvc.getHourlyAvgByDTime(name, dateFrom, dateTo).subscribe((data: any) => {
+  getValuesByDT() {
+    this.queryspinner = true;
+    this.mainSvc.getValuesByDTime(this.formItems.sensor, this.formItems.dateFrom, this.formItems.dateTo).subscribe((data: any) => {
       this.sandBoxVar = data;
-      // this.spinner1 = false;
+      this.queryspinner = false;
     });
   }
 
+  DownloadCSVByDT() {
+    this.queryspinner = true;
+    this.mainSvc.getHourlyAvgByDTime(this.formItems.sensor, this.formItems.dateFrom, this.formItems.dateTo).subscribe(
+      (blob: Blob) => {saveAs(blob, this.formItems.sensor+'_file_from_'+this.formItems.dateFrom +'_to_'+ this.formItems.dateTo+'.csv')},
+      (error) => {this.downloadError='Failed to download file. Please try again later',setTimeout(() => this.downloadError='', 5000),this.queryspinner = false},
+      ()=>this.queryspinner = false
+    )
+  }
+
+  
+    getQueryDesc(name: string) {
+      return this.fetchType.find(i => i.name === name)?.descr
+    }
 
   ///////// from here ////////
-  //////do Not returning result 
+  //////do Not returning result
   statuses: any[] = [
     { name: this.sensor1Name, data: {} },
     { name: this.sensor2Name, data: {} }

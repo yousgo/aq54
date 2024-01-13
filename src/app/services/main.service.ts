@@ -25,6 +25,6 @@ export class MainService {
   }
 
   getHourlyAvgByDTime(stationName:string,dtFrom:string, dtTo:string){
-    return this.http.get(url+'getHourlyAvg/'+stationName+'/'+dtFrom+'/'+dtTo)
+    return this.http.get(url+'getHourlyAvg/'+stationName+'/'+dtFrom+'/'+dtTo, { responseType: 'blob' })
   }
 }
