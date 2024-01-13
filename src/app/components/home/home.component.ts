@@ -4,7 +4,7 @@ import { Subscription, interval, map, min, timeout, timer, timestamp } from 'rxj
 import { DatePipe, DecimalPipe } from '@angular/common';
 import { NgbCalendar, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { saveAs } from 'file-saver';
-import { ColDef, SizeColumnsToContentStrategy, SizeColumnsToFitGridStrategy, SizeColumnsToFitProvidedWidthStrategy, ValueFormatterParams } from 'ag-grid-community'; 
+import { ColDef, SizeColumnsToContentStrategy, SizeColumnsToFitGridStrategy, SizeColumnsToFitProvidedWidthStrategy, ValueFormatterParams } from 'ag-grid-community';
 
 
 type FormItems = {
@@ -20,8 +20,8 @@ type FormItems = {
   styleUrl: './home.component.css',
 })
 export class HomeComponent {
-  constructor(private mainSvc: MainService, private datePipe: DatePipe,private dcmPipe: DecimalPipe) {  }
-   
+  constructor(private mainSvc: MainService, private datePipe: DatePipe, private dcmPipe: DecimalPipe) { }
+
   sensors = [{ id: 188, name: 'SMART188' }, { id: 189, name: 'SMART189' }];
   fetchType = [{ id: 1, name: "1", descr: 'Get Range' }, { id: 2, name: "2", descr: 'Get Hourly AVG (CSV)' }];
   sensor1Name: string = 'SMART188';
@@ -63,106 +63,101 @@ export class HomeComponent {
     month: this.today.month,
     day: this.today.day
   }
-  models: {from:NgbDateStruct, to:NgbDateStruct} = {
-    from:{
+  models: { from: NgbDateStruct, to: NgbDateStruct } = {
+    from: {
       year: NaN,
       month: NaN,
       day: NaN
-    }, 
-    to:{
+    },
+    to: {
       year: NaN,
       month: NaN,
       day: NaN
     }
   };
-  
+
   downloadError: string = ""
 
 
-   // row Datas
-   rowData: any[] = [
+  // row Datas
+  rowData: any[] = [
   ];
 
   // Column Definitions: Defines & controls grid columns.
   colDefs: ColDef[] = [
-    { field : "AUX1" },
-    { field : "AUX2" },
-    { field : "AUX3" },
-    { field : "co" },
-    { field : "extT" },
-    { field : "intT" },
-    { field : "lat" },
-    { field : "lon" },
-    { field : "no2" },
-    { field : "o3" },
-    { field : "pm10" },
-    { field : "pm25" },
-    { field : "rh" },
-    { field : "AUX1_INPUT" },
-    { field : "AUX2_INPUT" },
-    { field : "utc_timestamp" ,headerName: "Time and Date", valueFormatter:this.dTFormat, pinned: 'left'}
+    { field: "AUX1" },
+    { field: "AUX2" },
+    { field: "AUX3" },
+    { field: "co" },
+    { field: "extT" },
+    { field: "intT" },
+    { field: "lat" },
+    { field: "lon" },
+    { field: "no2" },
+    { field: "o3" },
+    { field: "pm10" },
+    { field: "pm25" },
+    { field: "rh" },
+    { field: "AUX1_INPUT" },
+    { field: "AUX2_INPUT" },
+    { field: "utc_timestamp", headerName: "Time and Date", valueFormatter: this.dTFormat, pinned: 'left' }
   ];
 
-   
+
   autoSizeStrategy:
     | SizeColumnsToFitGridStrategy
     | SizeColumnsToFitProvidedWidthStrategy
     | SizeColumnsToContentStrategy = {
-    type: 'fitCellContents',
-  };
+      type: 'fitCellContents',
+    };
 
-  dTFormat(params:ValueFormatterParams){
+  dTFormat(params: ValueFormatterParams) {
     let date = new Date(params.value)
-    let h = (date.getHours().toString().length===1)?'0'+date.getHours(): date.getHours()
-    let m = (date.getMinutes().toString().length===1)?'0'+date.getMinutes(): date.getMinutes()
-    return date.toDateString() +' '+ h +':'+ m
+    let h = (date.getHours().toString().length === 1) ? '0' + date.getHours() : date.getHours()
+    let m = (date.getMinutes().toString().length === 1) ? '0' + date.getMinutes() : date.getMinutes()
+    return date.toDateString() + ' ' + h + ':' + m
   }
- 
+
   getValuesByDT() {
     this.queryspinner = true;
     this.mainSvc.getValuesByDTime(this.formItems.sensor, this.formItems.dateFrom, this.formItems.dateTo).subscribe((data: any) => {
-        setTimeout(
-()=>{
-
-  this.rowData = data['raw_data']
-  this.queryspinner = false;
-}
-          ,500) 
+      this.rowData = data['raw_data']
+      this.queryspinner = false;
     });
   }
 
   DownloadCSVByDT() {
     this.queryspinner = true;
     this.mainSvc.getHourlyAvgByDTime(this.formItems.sensor, this.formItems.dateFrom, this.formItems.dateTo).subscribe(
-      (blob: Blob) => {saveAs(blob, this.formItems.sensor+'_file_from_'+this.formItems.dateFrom +'_to_'+ this.formItems.dateTo+'.csv')},
-      (error) => {this.downloadError='Failed to download file. Please try again later',setTimeout(() => this.downloadError='', 5000),this.queryspinner = false},
-      ()=>this.queryspinner = false
+      (blob: Blob) => { saveAs(blob, this.formItems.sensor + '_file_from_' + this.formItems.dateFrom + '_to_' + this.formItems.dateTo + '.csv') },
+      (error) => { this.downloadError = 'Failed to download file. Please try again later', setTimeout(() => this.downloadError = '', 5000), this.queryspinner = false },
+      () => this.queryspinner = false
     )
   }
 
-  minOfModel(modl1: NgbDateStruct, modl2: NgbDateStruct){
-    let a= new Date(this.modelToISO(modl1));
+  minOfModel(modl1: NgbDateStruct, modl2: NgbDateStruct) {
+    let a = new Date(this.modelToISO(modl1));
     let b = new Date(this.modelToISO(modl2));
-    return a<b?modl1:b<a?modl2:modl2
+    return a < b ? modl1 : b < a ? modl2 : modl2
   }
 
-  modelToISO(modl:NgbDateStruct) {
+  modelToISO(modl: NgbDateStruct) {
     let month = this.dcmPipe.transform(modl.month, "2.0-0")
-    return modl.year+'-'+month+'-'+modl.day;
+    return modl.year + '-' + month + '-' + modl.day;
   }
 
-  setPickedDates(index:number){
-     switch (index) {
+  setPickedDates(index: number) {
+    switch (index) {
       case 1:
-        this.formItems.dateFrom=this.modelToISO(this.models['from'])
+        this.formItems.dateFrom = this.modelToISO(this.models['from'])
         break;
-        case 2:
-          this.formItems.dateTo=this.modelToISO(this.models['to'])
+      case 2:
+        this.formItems.dateTo = this.modelToISO(this.models['to'])
         break;
       default:
         break;
-       }
-      }
+    }
+  }
 
   setFormItems(key: number, value: string) {
     switch (key) {
@@ -178,10 +173,10 @@ export class HomeComponent {
     }
   }
 
-  
-    getQueryDesc(name: string) {
-      return this.fetchType.find(i => i.name === name)?.descr
-    }
+
+  getQueryDesc(name: string) {
+    return this.fetchType.find(i => i.name === name)?.descr
+  }
 
   ///////// from here ////////
   //////do Not returning result
