@@ -1,25 +1,27 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { MainService } from '../../services/main.service';
-import { Subscription, interval, map, timeout, timer, timestamp } from 'rxjs';
+import { Subscription, interval, map, min, timeout, timer, timestamp } from 'rxjs';
 import { DatePipe, DecimalPipe } from '@angular/common';
 import { NgbCalendar, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { saveAs } from 'file-saver';
+import { ColDef, SizeColumnsToContentStrategy, SizeColumnsToFitGridStrategy, SizeColumnsToFitProvidedWidthStrategy, ValueFormatterParams } from 'ag-grid-community'; 
+
 
 type FormItems = {
   sensor: string,
   queryType: string,
   dateFrom: string,
   dateTo: string
-}
+};
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
-  styleUrl: './home.component.css'
+  styleUrl: './home.component.css',
 })
 export class HomeComponent {
-  constructor(private mainSvc: MainService, private datePipe: DatePipe,private dcmPipe: DecimalPipe) { }
-
+  constructor(private mainSvc: MainService, private datePipe: DatePipe,private dcmPipe: DecimalPipe) {  }
+   
   sensors = [{ id: 188, name: 'SMART188' }, { id: 189, name: 'SMART189' }];
   fetchType = [{ id: 1, name: "1", descr: 'Get Range' }, { id: 2, name: "2", descr: 'Get Hourly AVG (CSV)' }];
   sensor1Name: string = 'SMART188';
@@ -43,7 +45,12 @@ export class HomeComponent {
   sandBoxVar: any = {}
 
   timerSubs: Subscription = new Subscription;
-
+  // formItems: FormItems = {
+  //   sensor: "SMART188",
+  //   queryType: "1",
+  //   dateFrom: "2024-01-13",
+  //   dateTo: "2024-01-13",
+  // }
   formItems: FormItems = {
     sensor: "",
     queryType: "",
@@ -72,7 +79,73 @@ export class HomeComponent {
   downloadError: string = ""
 
 
-	// date: { year: number; month: number } = {year:this.today.year, month:this.today.month};
+   // row Datas
+   rowData: any[] = [
+  ];
+
+  // Column Definitions: Defines & controls grid columns.
+  colDefs: ColDef[] = [
+    { field : "AUX1" },
+    { field : "AUX2" },
+    { field : "AUX3" },
+    { field : "co" },
+    { field : "extT" },
+    { field : "intT" },
+    { field : "lat" },
+    { field : "lon" },
+    { field : "no2" },
+    { field : "o3" },
+    { field : "pm10" },
+    { field : "pm25" },
+    { field : "rh" },
+    { field : "AUX1_INPUT" },
+    { field : "AUX2_INPUT" },
+    { field : "utc_timestamp" ,headerName: "Time and Date", valueFormatter:this.dTFormat, pinned: 'left'}
+  ];
+
+   
+  autoSizeStrategy:
+    | SizeColumnsToFitGridStrategy
+    | SizeColumnsToFitProvidedWidthStrategy
+    | SizeColumnsToContentStrategy = {
+    type: 'fitCellContents',
+  };
+
+  dTFormat(params:ValueFormatterParams){
+    let date = new Date(params.value)
+    let h = (date.getHours().toString().length===1)?'0'+date.getHours(): date.getHours()
+    let m = (date.getMinutes().toString().length===1)?'0'+date.getMinutes(): date.getMinutes()
+    return date.toDateString() +' '+ h +':'+ m
+  }
+ 
+  getValuesByDT() {
+    this.queryspinner = true;
+    this.mainSvc.getValuesByDTime(this.formItems.sensor, this.formItems.dateFrom, this.formItems.dateTo).subscribe((data: any) => {
+        setTimeout(
+()=>{
+
+  this.rowData = data['raw_data']
+  this.queryspinner = false;
+}
+          ,500) 
+    });
+  }
+
+  DownloadCSVByDT() {
+    this.queryspinner = true;
+    this.mainSvc.getHourlyAvgByDTime(this.formItems.sensor, this.formItems.dateFrom, this.formItems.dateTo).subscribe(
+      (blob: Blob) => {saveAs(blob, this.formItems.sensor+'_file_from_'+this.formItems.dateFrom +'_to_'+ this.formItems.dateTo+'.csv')},
+      (error) => {this.downloadError='Failed to download file. Please try again later',setTimeout(() => this.downloadError='', 5000),this.queryspinner = false},
+      ()=>this.queryspinner = false
+    )
+  }
+
+  minOfModel(modl1: NgbDateStruct, modl2: NgbDateStruct){
+    let a= new Date(this.modelToISO(modl1));
+    let b = new Date(this.modelToISO(modl2));
+    return a<b?modl1:b<a?modl2:modl2
+  }
+
   modelToISO(modl:NgbDateStruct) {
     let month = this.dcmPipe.transform(modl.month, "2.0-0")
     return modl.year+'-'+month+'-'+modl.day;
@@ -103,23 +176,6 @@ export class HomeComponent {
       default:
         break;
     }
-  }
-
-  getValuesByDT() {
-    this.queryspinner = true;
-    this.mainSvc.getValuesByDTime(this.formItems.sensor, this.formItems.dateFrom, this.formItems.dateTo).subscribe((data: any) => {
-      this.sandBoxVar = data;
-      this.queryspinner = false;
-    });
-  }
-
-  DownloadCSVByDT() {
-    this.queryspinner = true;
-    this.mainSvc.getHourlyAvgByDTime(this.formItems.sensor, this.formItems.dateFrom, this.formItems.dateTo).subscribe(
-      (blob: Blob) => {saveAs(blob, this.formItems.sensor+'_file_from_'+this.formItems.dateFrom +'_to_'+ this.formItems.dateTo+'.csv')},
-      (error) => {this.downloadError='Failed to download file. Please try again later',setTimeout(() => this.downloadError='', 5000),this.queryspinner = false},
-      ()=>this.queryspinner = false
-    )
   }
 
   

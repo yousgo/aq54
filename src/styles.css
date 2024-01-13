@@ -1,5 +1,9 @@
-/* @import '~bootstrap-icons/font/bootstrap-icons.css'; */
 /* You can add global styles to this file, and also import other style files */
+@import "bootstrap-icons/font/bootstrap-icons.css";
+
+@import "ag-grid-community/styles/ag-grid.css";
+@import "ag-grid-community/styles/ag-theme-quartz.css";
+@import "ag-grid-community/styles/ag-theme-alpine.min.css";
 
 body{
     background-color: lightgray;

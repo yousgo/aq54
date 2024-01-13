@@ -9,12 +9,13 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { HttpClientModule } from '@angular/common/http';
 import { CommonModule, DatePipe, DecimalPipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { AgGridModule } from 'ag-grid-angular';
 
 @NgModule({
   declarations: [
     AppComponent,
     HomeComponent,
-    RouteTestComponent
+    RouteTestComponent,
   ],
   imports: [
     BrowserModule,
@@ -22,6 +23,7 @@ import { FormsModule } from '@angular/forms';
     NgbModule,
     HttpClientModule,
     FormsModule,
+    AgGridModule
     // CommonModule
   ],
   providers: [DatePipe, DecimalPipe],
