@@ -3,12 +3,6 @@ import { MainService } from '../../services/main.service';
 import { Subscription, map, timer, timestamp } from 'rxjs';
 import { DatePipe } from '@angular/common';
 
-type FormItems = {
-  sensor: string,
-  queryType: string,
-  dateFrom: string,
-  dateTo: string
-}
 
 @Component({
   selector: 'app-home',
@@ -16,17 +10,12 @@ type FormItems = {
   styleUrl: './home.component.css'
 })
 export class HomeComponent {
-  constructor(private mainSvc: MainService, private datePipe: DatePipe) { }
+  constructor(private mainSvc: MainService, private datePipe:DatePipe) { }
 
   sensors = [{ id: 188, name: 'SMART188' }, { id: 189, name: 'SMART189' }];
   sensor1Name: string = 'SMART188';
   sensor2Name: string = 'SMART189';
   limitTemp: number = 30;
-  fetchType = [{ id: 1, name: "1", descr: 'Get Range' }, { id: 2, name: "2", descr: 'Get Hourly AVG (CSV)' }];
-
-  dt1 = "2024-01-01";
-  dt21 = "2024-01-11";
-  dt2 = this.datePipe.transform(Date(), 'YYYY-mm-dd');
 
   value1: any[] = [];
   value2: any[] = [];
@@ -41,7 +30,12 @@ export class HomeComponent {
 
   timerSubs: Subscription = new Subscription;
 
-  formItems: FormItems = {
+  formItems: {
+        sensor: string,
+    queryType: string,
+    dateFrom: string,
+    dateTo: string,
+  } = {
     sensor: "",
     queryType: "",
     dateFrom: "",
@@ -71,17 +65,18 @@ export class HomeComponent {
   fireQuery() {
 
   }
-  getQueryDesc(name: string) {
-    return this.fetchType.find(i => i.name === name)?.descr
-  }
 
-  getRangeByDT(name: string, dateFrom: string, dateTo: string) {
-    this.mainSvc.getHourlyAvgByDTime(name, dateFrom, dateTo).subscribe((data: any) => {
+
+  getRangeByDT(name:string, dateFrom:string, dateTo:string){
+    this.mainSvc.getHourlyAvgByDTime(name, dateFrom, dateTo).subscribe((data:any) => {
       this.sandBoxVar = data;
       // this.spinner1 = false;
     });
   }
 
+
+
+  
 
   ///////// from here ////////
   //////do Not returning result 
@@ -124,7 +119,7 @@ export class HomeComponent {
     }
     if (name == this.sensor2Name) {
       this.spinner2 = true;
-      this.mainSvc.getCurrentValue(name).subscribe((data: any) => {
+      this.mainSvc.getCurrentValue(name).subscribe((data:any) => {
         this.value2Clear = this.formatRawData(data)
         this.value2 = data['values']
         this.spinner2 = false;
@@ -137,18 +132,18 @@ export class HomeComponent {
     // this.refresh(this.sensor2Name);
     this.sensors.forEach(element => {
       this.getStatus(element.id)
-    });
+    }); 
 
-    this.timerSubs = timer(0, 60000).pipe(
-      map(() => {
+    this.timerSubs = timer(0, 60000).pipe( 
+      map(() => { 
         this.refresh(this.sensor1Name);
         this.refresh(this.sensor2Name);
-      })
-    ).subscribe();
+      }) 
+    ).subscribe(); 
   }
 
-  ngOnDestroy(): void {
-    this.timerSubs.unsubscribe();
-  }
-
+  ngOnDestroy(): void { 
+    this.timerSubs.unsubscribe(); 
+  } 
+  
 }
