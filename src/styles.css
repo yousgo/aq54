@@ -9,8 +9,6 @@ body{
     background-color: lightgray;
 }
 
-.main{    
-}
 .content{
     margin:2em 2em;
     /* padding-bottom: 1em; */
@@ -36,11 +34,11 @@ body{
 }
 
 .fsBig{
-    font-size:2em;
+    font-size:1.5em;
 } 
 
 .fsVeryBig{
-    font-size: 6em;
+    font-size: 5em;
     line-height: 1;
 }
 

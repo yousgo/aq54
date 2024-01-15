@@ -1,6 +1,10 @@
+<main class="container bg-white bordered shadow my-2">
+    <h1 class='text-center col-sm-12'> {{title}} </h1>
+</main>
+
 <div class="row justify-content-between">
     <div class="col-sm-6">
-        <div class="card me-2 shadow">
+        <div class="card shadow">
             <div class="card-header ">
                 <div class="d-flex justify-content-between align-items-center">{{sensor1Name}}
                     <span *ngIf="spinner1" class="spinner-border spinner-border-sm" role="status"
@@ -9,49 +13,47 @@
             </div>
             <div class="card-body">
                 <div class="row">
-                    <div class="col">
+                    <div class="col-sm-8">
                         <div class="flex-column justify-content-between">
-                            <div class="">
-                                <div class="d-flex align-items-center">
+                            <div class="row">
+                                <div class="col-sm-5">
                                     <img class="iconFrame" *ngIf="value1Clear['temperature']<limitTemp"
                                         src="../../../assets/images/nuageux.png">
                                     <img class="iconFrame" *ngIf="value1Clear['temperature']>=limitTemp"
                                         src="../../../assets/images/soleil.png">
+                                </div>
+                                <div class="col-sm-7">
 
                                     <div class="d-flex flex-column">
                                         <div class="d-flex flex-row">
-                                            <span class="fsVeryBig px-3">{{value1Clear['temperature']| number:'0.0-2'}}
-                                            </span>
+                                            <div class="fsVeryBig px-1">{{value1Clear['temperature']| number:'0.0-2'}}
+                                            </div>
                                             <div class="fs-1 pt-2">{{value1Clear['temperatureUnit']}}</div>
                                         </div>
-                                        <div class="d-flex flex-row align-items-center px-3">
+                                        <div class="d-flex flex-row align-items-between px-1">
                                             <div class="fsBig">{{ value1Clear['timestamp']| date:'HH:mm'}}</div>
-                                            <div class=""></div>
-                                            <div class="pt-2 px-3 fs-5">{{ value1Clear['timestamp'] | date}}</div>
-                                            <!-- <div>{{ statuses[0]['data'] | json}}</div> -->
+                                            <div class="pt-2 px-2 fs-6">{{ value1Clear['timestamp'] | date}}</div>
                                         </div>
                                     </div>
                                 </div>
-                                <br />
-                                <button class="btn btn-primary" (click)="refresh(sensor1Name)">Refresh</button>
                             </div>
+                            <br />
+                            <button class="btn btn-primary" (click)="refresh(sensor1Name)">Refresh</button>
                         </div>
                     </div>
-                    <div class="col-sm-4">
+                    <div class="col-sm-4 py-2">
                         <ul class="fs-6 ulwithoutDots">
                             <li *ngFor="let itm of value1">{{itm['sensor'] | titlecase}} <span
-                                    class="fw-bold text-secondary">{{ ' '+ itm['value']}}</span>{{' '+ itm['unit']}}
+                                    class="fw-bold text-secondary">{{' '+ itm['value'] | number: '0.0-2'}}</span>{{' '+ itm['unit']}}
                             </li>
                         </ul>
                     </div>
                 </div>
-                <!-- <h5 class="card-title"></h5> -->
-                <!-- <p class="card-text">{{ sandBoxVar |json}}</p> -->
             </div>
         </div>
     </div>
     <div class="col-sm-6">
-        <div class="card ms-2 shadow">
+        <div class="card shadow">
             <div class="card-header">
                 <div class="d-flex justify-content-between align-items-center">{{sensor2Name}}
                     <span *ngIf="spinner2" class="spinner-border spinner-border-sm" role="status"
@@ -59,45 +61,43 @@
                 </div>
             </div>
             <div class="card-body">
-                <!-- <h5 class="card-title">{{sensor2Name}}</h5> -->
                 <div class="row">
-                    <div class="col">
+                    <div class="col-sm-8">
                         <div class="flex-column justify-content-between">
-                            <div class="">
-                                <div class="d-flex align-items-center">
+                            <div class="row">
+                                <div class="col-sm-5">
                                     <img class="iconFrame" *ngIf="value2Clear['temperature']<limitTemp"
                                         src="../../../assets/images/nuageux.png">
                                     <img class="iconFrame" *ngIf="value2Clear['temperature']>=limitTemp"
                                         src="../../../assets/images/soleil.png">
+                                </div>
+                                <div class="col-sm-7">
 
                                     <div class="d-flex flex-column">
                                         <div class="d-flex flex-row">
-                                            <span class="fsVeryBig px-3">{{value2Clear['temperature']| number:'0.0-2'}}
-                                            </span>
+                                            <div class="fsVeryBig px-1">{{value2Clear['temperature']| number:'0.0-2'}}
+                                            </div>
                                             <div class="fs-1 pt-2">{{value2Clear['temperatureUnit']}}</div>
                                         </div>
-                                        <div class="d-flex flex-row align-items-center px-3">
+                                        <div class="d-flex flex-row align-items-between px-1">
                                             <div class="fsBig">{{ value2Clear['timestamp']| date:'HH:mm'}}</div>
-                                            <div class=""></div>
-                                            <div class="pt-2 px-3 fs-5">{{ value2Clear['timestamp'] | date}}</div>
-                                            <!-- <div>{{ statuses[0]['data'] | json}}</div> -->
+                                            <div class="pt-2 px-2 fs-6">{{ value2Clear['timestamp'] | date}}</div>
                                         </div>
                                     </div>
                                 </div>
-                                <br />
-                                <a class="btn btn-primary " (click)="refresh(sensor2Name)">Refresh</a>
                             </div>
+                            <br />
+                            <button class="btn btn-primary" (click)="refresh(sensor2Name)">Refresh</button>
                         </div>
                     </div>
-                    <div class="col-sm-4">
+                    <div class="col-sm-4 py-1">
                         <ul class="fs-6 ulwithoutDots">
                             <li *ngFor="let itm of value2">{{itm['sensor'] | titlecase}} <span
-                                    class="fw-bold text-secondary">{{ ' '+ itm['value']}}</span>{{' '+ itm['unit']}}
+                                    class="fw-bold text-secondary">{{ ' '+ itm['value']| number: '0.0-2'}}</span>{{' '+ itm['unit']}}
                             </li>
                         </ul>
                     </div>
                 </div>
-                <!-- <p class="card-text">{{ (value2 | json)}}</p> -->
             </div>
         </div>
     </div>
@@ -106,28 +106,10 @@
 
 
 
+<div class="d-flex row bordered my-2">
+    <div class="col-sm-3">
 
-<!-- <div class="d-flex justify-content-between py-3" >
-
-    <div *ngFor='let item of [1,2,3]' class="card" style="width: 18rem;">
-        <div class="card-header">
-            Quote
-        </div>
-        <div class="card-body">
-            <h5 class="card-title">Card title</h5>
-            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
-                card's content.</p>
-            <a href="#" class="btn btn-primary">Go somewhere</a>
-        </div>
-    </div>
-
-</div> -->
-
-<div class="d-flex bordered my-4 justify-content-between">
-
-    <div class="me-4">
-
-        <div class="card shadow mr-2" style="width: 18rem;">
+        <div class="card shadow">
             <div class="card-body">
                 <div class="d-flex justify-content-between align-items-center">
                     <h5 class="card-title fs-4">Queries</h5>
@@ -190,21 +172,16 @@
         </div>
     </div>
 
-    <div class="card shadow col">
-        <div class="card-body" >
-            <!-- <h5 class="card-title">Card title {{ "2024-01-13 00:30:45"| date }}</h5> -->
-            <!-- <p class="card-text" (click)="getValuesByDT()">{{ (rowData  | json)}}</p> -->
-            <!-- <p class="card-text">{{ (sandBoxVar | json)}}</p> -->
-            <ag-grid-angular 
-                style="width: 100%; height: 300px;" 
-                class="ag-theme-alpine" 
-                [autoSizeStrategy]="autoSizeStrategy"
-                [rowData]="rowData"
-                [columnDefs]="colDefs">
-            </ag-grid-angular>
+    <div class="col-sm-9">
+
+        <div class="card shadow ">
+            <div class="card-body">
+      
+                <ag-grid-angular style="width: 100%; height: 300px;" class="ag-theme-alpine"
+                    [autoSizeStrategy]="autoSizeStrategy" [rowData]="rowData" [columnDefs]="colDefs">
+                </ag-grid-angular>
+            </div>
         </div>
-
-
     </div>
 
 </div>

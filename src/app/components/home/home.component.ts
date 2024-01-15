@@ -22,15 +22,12 @@ type FormItems = {
 export class HomeComponent {
   constructor(private mainSvc: MainService, private datePipe: DatePipe, private dcmPipe: DecimalPipe) { }
 
+  title = "AQ54"
   sensors = [{ id: 188, name: 'SMART188' }, { id: 189, name: 'SMART189' }];
   fetchType = [{ id: 1, name: "1", descr: 'Get Range' }, { id: 2, name: "2", descr: 'Get Hourly AVG (CSV)' }];
   sensor1Name: string = 'SMART188';
   sensor2Name: string = 'SMART189';
   limitTemp: number = 30;
-
-  dt1 = "2024-01-01";
-  dt21 = "2024-01-11";
-  dt2 = this.datePipe.transform(Date(), 'YYYY-mm-dd');
 
   value1: any[] = [];
   value2: any[] = [];
@@ -178,27 +175,6 @@ export class HomeComponent {
     return this.fetchType.find(i => i.name === name)?.descr
   }
 
-  ///////// from here ////////
-  //////do Not returning result
-  statuses: any[] = [
-    { name: this.sensor1Name, data: {} },
-    { name: this.sensor2Name, data: {} }
-  ];
-
-
-  getStatus(id: number) {
-    this.mainSvc.getSensorStatus(id).subscribe((data: any) => {
-      this.updateStatuses(id, data)
-      this.sandBoxVar = data;
-    });
-  }
-
-  updateStatuses(id: number, newData: any) {
-    let indx = this.statuses.findIndex(item => item.name === 'SMART' + id);
-    this.statuses[indx]['data'] = newData;
-  }
-  /////////// To here  /////////
-  /////////// However the code is good  /////////
 
   formatRawData(data: any) {
     let clearData: any = {};
@@ -228,11 +204,9 @@ export class HomeComponent {
   }
 
   ngOnInit() {
-    // this.refresh(this.sensor1Name);
-    // this.refresh(this.sensor2Name);
-    this.sensors.forEach(element => {
-      this.getStatus(element.id)
-    });
+    // this.sensors.forEach(element => {
+    //   this.getStatus(element.id)
+    // });
 
     this.timerSubs = timer(0, 60000).pipe(
       map(() => {
