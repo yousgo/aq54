@@ -4,7 +4,6 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HomeComponent } from './components/home/home.component';
-import { RouteTestComponent } from './components/route-test/route-test.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { HttpClientModule } from '@angular/common/http';
 import { CommonModule, DatePipe, DecimalPipe } from '@angular/common';
@@ -15,7 +14,6 @@ import { AgGridModule } from 'ag-grid-angular';
   declarations: [
     AppComponent,
     HomeComponent,
-    RouteTestComponent,
   ],
   imports: [
     BrowserModule,

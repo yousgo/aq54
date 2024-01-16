@@ -44,7 +44,8 @@
                     <div class="col-sm-4 py-2">
                         <ul class="fs-6 ulwithoutDots">
                             <li *ngFor="let itm of value1">{{itm['sensor'] | titlecase}} <span
-                                    class="fw-bold text-secondary">{{' '+ itm['value'] | number: '0.0-2'}}</span>{{' '+ itm['unit']}}
+                                    class="fw-bold text-secondary">{{' '+ itm['value'] | number: '0.0-2'}}</span>{{' '+
+                                itm['unit']}}
                             </li>
                         </ul>
                     </div>
@@ -67,9 +68,9 @@
                             <div class="row">
                                 <div class="col-sm-5">
                                     <img class="iconFrame" *ngIf="value2Clear['temperature']<limitTemp"
-                                        src="../../../assets/images/nuageux.png">
+                                        src="/assets/images/nuageux.png">
                                     <img class="iconFrame" *ngIf="value2Clear['temperature']>=limitTemp"
-                                        src="../../../assets/images/soleil.png">
+                                        src="/assets/images/soleil.png">
                                 </div>
                                 <div class="col-sm-7">
 
@@ -93,7 +94,8 @@
                     <div class="col-sm-4 py-1">
                         <ul class="fs-6 ulwithoutDots">
                             <li *ngFor="let itm of value2">{{itm['sensor'] | titlecase}} <span
-                                    class="fw-bold text-secondary">{{ ' '+ itm['value']| number: '0.0-2'}}</span>{{' '+ itm['unit']}}
+                                    class="fw-bold text-secondary">{{ ' '+ itm['value']| number: '0.0-2'}}</span>{{' '+
+                                itm['unit']}}
                             </li>
                         </ul>
                     </div>
@@ -176,9 +178,10 @@
 
         <div class="card shadow ">
             <div class="card-body">
-      
+
                 <ag-grid-angular style="width: 100%; height: 300px;" class="ag-theme-alpine"
-                    [autoSizeStrategy]="autoSizeStrategy" [rowData]="rowData" [columnDefs]="colDefs">
+                    [autoSizeStrategy]="autoSizeStrategy" [rowData]="rowData" [columnDefs]="colDefs"
+                    [defaultColDef]="defaultColDef" [pagination]="true">
                 </ag-grid-angular>
             </div>
         </div>

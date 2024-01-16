@@ -1,27 +1,35 @@
 # Aq54
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 17.0.9.
+Ce project à été developé avec [Angular CLI](https://github.com/angular/angular-cli) version 17.0.9.
 
-## Development server
+## Vue d'ensemble 
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+L'application AQ54 permet de visualiser les données des capteurs `SMART188` et `SMART189` 
+cette visualisation est de 2 types: 
 
-## Code scaffolding
+### le mode temps reel 
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+Le mode temps réel diffuse les données actuelle de chacun des capteurs et les actualise chaque `minute`.
+il est cependant possible d'actualiser manuellement l'affichage entre 2 actualisations automatiques. Cela en cliquant sur le bouton `Refresh`.
 
-## Build
+<img src="/assets/images/realtime.png" width="128" alt="aq54Image1" />
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+### le mode différé
 
-## Running unit tests
+Le mode différé qui permet de recupérer les données recueillies par un capteur sur un intervalle de temps donné. 
+en renseignant les champs obligatoires de la carte `Queries` puis en cliquant sur le bouton qui n'apprait en dessous des champs qu'après remplissage.
+<img src="/assets/images/queries.png" width="300" alt="aq54Image2" />
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+Les données de la requête apparaissent ainsi dans un tableau
+<img src="/assets/images/table2.png" width="700" alt="aq54Image3" />
 
-## Running end-to-end tests
+Le mode différé permet aussi le téléchargement des données en fichier CSV en choisisant le type `Get Hourly AVG (CSV)`
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+## Auteur
 
-## Further help
+Youssoufou SEKONGO
+yousekongo@gmail.com
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+## conteneurisation 
+
+(voir README.Docker.md)

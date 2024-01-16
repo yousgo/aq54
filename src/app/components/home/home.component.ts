@@ -100,6 +100,14 @@ export class HomeComponent {
     { field: "utc_timestamp", headerName: "Time and Date", valueFormatter: this.dTFormat, pinned: 'left' }
   ];
 
+  defaultColDef : ColDef = {
+      enableRowGroup: true,
+      enablePivot: true,
+      enableValue: true,
+      filter: true,
+      flex: 1,
+      minWidth: 100,
+    };
 
   autoSizeStrategy:
     | SizeColumnsToFitGridStrategy
