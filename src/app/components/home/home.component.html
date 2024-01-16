@@ -168,8 +168,8 @@
                     <span class="text-danger fw-bold mx-1" *ngIf="!formItems.dateTo">*</span>
                 </div>
 
-                <a class="btn btn-dark" (click)="getValuesByDT()" *ngIf='formItems.queryType=="1"'>Get</a>
-                <a class="btn btn-dark" (click)="DownloadCSVByDT()" *ngIf='formItems.queryType=="2"'>Download</a>
+                <button class="btn btn-primary" (click)="getValuesByDT()" *ngIf='formItems.queryType=="1"' [disabled]="!formItems.dateFrom || !formItems.dateTo">Get</button>
+                <button class="btn btn-dark" (click)="DownloadCSVByDT()" *ngIf='formItems.queryType=="2"' [disabled]="!formItems.dateFrom || !formItems.dateTo">Download</button>
             </div>
         </div>
     </div>
